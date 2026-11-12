@@ -22,3 +22,10 @@
 - **Models:** What does the database store?
 - **Schemas:** What data can the API accept and return?
 - **Routers:** What happens when someone calls an endpoint?
+
+## Install Dependencies
+
+With your virtual environment activated, install all packages listed in `requirements.txt`:
+
+```bash
+python -m pip install -r requirements.txt
