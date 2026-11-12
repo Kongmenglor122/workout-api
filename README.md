@@ -29,3 +29,22 @@ With your virtual environment activated, install all packages listed in `require
 
 ```bash
 python -m pip install -r requirements.txt
+
+## Run the Project
+
+Activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Start the development server from the project root:
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+- API: http://127.0.0.1:8000/
+- Interactive documentation: http://127.0.0.1:8000/docs
+- `--reload` restarts the server when code changes.
+- Press `Control+C` to stop the server.
