@@ -32,11 +32,23 @@ class WorkoutFinish(BaseModel):
     ended_at: datetime 
     notes: str | None = None
 
-
 class WorkoutResponse(BaseModel):
     id: int
     started_at: datetime
     ended_at: datetime | None
     notes: str | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class WorkoutActivityCreate(BaseModel):
+    machine_id: int
+    started_at: datetime
+
+class WorkoutActivityResponse(BaseModel):
+    id: int
+    workout_id: int
+    machine_id: int
+    started_at: datetime
+    ended_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
