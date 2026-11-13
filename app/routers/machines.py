@@ -33,7 +33,7 @@ def get_machine_by_id(id: int, db: Session = Depends(get_db),):
 
     if machine == None:
         raise HTTPException(status_code=404, detail="Machine not found")
-    
+
     return machine
 @router.delete("/{id}", status_code=204)
 def delete_machine(id: int, db: Session = Depends(get_db)):
@@ -48,3 +48,28 @@ def delete_machine(id: int, db: Session = Depends(get_db)):
     print(db.delete(machine))
     db.commit()
     return Response(status_code=204)
+@router.patch("/{id}", response_model=schemas.MachineResponse)
+def update_machine_by_id(id:int, updates: schemas.MachineUpdate,db: Session = Depends(get_db)):
+
+    machine = db.get(models.Machine, id)
+
+    if machine is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Machine not found"
+        )
+    
+    update_values = updates.model_dump(exclude_unset=True)
+    for field in ("name", "muscle_group", "description"):
+        if field in update_values and update_values[field] is None:
+            raise HTTPException(
+                status_code=422,
+                detail=f"{field} cannot be null",
+            )
+    for field, value in update_values.items():
+        setattr(machine, field, value)
+
+    db.commit()
+    db.refresh(machine)
+
+    return machine
