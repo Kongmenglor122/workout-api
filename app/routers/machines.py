@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+
 
 from app import models, schemas
 from app.database import get_db
@@ -26,3 +27,24 @@ def get_all_machines(db: Session = Depends(get_db),):
     machines = db.scalars(statement).all()
 
     return machines
+@router.get("/{id}", response_model=schemas.MachineResponse)
+def get_machine_by_id(id: int, db: Session = Depends(get_db),):
+    machine = db.get(models.Machine, id)
+
+    if machine == None:
+        raise HTTPException(status_code=404, detail="Machine not found")
+    
+    return machine
+@router.delete("/{id}", status_code=204)
+def delete_machine(id: int, db: Session = Depends(get_db)):
+    machine = db.get(models.Machine, id)
+
+    if machine is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Machine not found",
+        )
+    db.delete(machine)
+    print(db.delete(machine))
+    db.commit()
+    return Response(status_code=204)
