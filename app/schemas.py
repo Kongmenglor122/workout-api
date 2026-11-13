@@ -16,11 +16,23 @@ class MachineUpdate(BaseModel):
     muscle_group: str | None = None
     description: str | None = None
 
-
 class MachineResponse(BaseModel):
     id: int
     name: str
     muscle_group: str
     description: str | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class WorkoutCreate(BaseModel):
+    started_at: datetime
+    notes: str | None = None
+
+
+class WorkoutResponse(BaseModel):
+    id: int
+    started_at: datetime
+    ended_at: datetime | None
+    notes: str | None
 
     model_config = ConfigDict(from_attributes=True)

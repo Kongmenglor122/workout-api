@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import machines
+from app.routers import machines,workouts
 
 app = FastAPI(title="Workout API")
 
@@ -9,3 +9,4 @@ def root():
     return {"message": "Welcome to your Workout API"}
 
 app.include_router(machines.router)
+app.include_router(workouts.router)
