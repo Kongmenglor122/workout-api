@@ -28,6 +28,10 @@ class WorkoutCreate(BaseModel):
     started_at: datetime
     notes: str | None = None
 
+class WorkoutFinish(BaseModel):
+    ended_at: datetime 
+    notes: str | None = None
+
 
 class WorkoutResponse(BaseModel):
     id: int

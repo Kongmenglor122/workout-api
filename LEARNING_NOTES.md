@@ -1,5 +1,3 @@
-cat >> README.md <<'EOF'
-
 ## Backend Learning Notes
 
 ### Project Setup

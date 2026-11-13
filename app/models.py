@@ -13,7 +13,6 @@ class Machine(Base):
     muscle_group: Mapped[str] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(String(500))
 
-    
 
 class Workout(Base):
     __tablename__ = "workouts"
