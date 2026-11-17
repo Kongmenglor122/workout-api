@@ -65,3 +65,22 @@ def finish_workout_activity(activity_id: int, ended_at_time: schemas.WorkoutActi
     db.refresh(activity_object)
 
     return activity_object
+
+# @router.get("", response_model=list[schemas.WorkoutActivityResponse])
+# def get_workout_activities(
+#     id: int,
+#     db: Session = Depends(get_db),
+# ):
+#     statement = db.get(models.WorkoutActivity, id)
+
+#     if statement is None:
+#         raise HTTPException(status_code= 404, detail="it doesn't exist")
+
+#     return db.scalars(statement).all()
+#     # 1. Find the workout; return 404 if it doesn't exist.
+
+#     # 2. Select activities where workout_id matches id.
+
+#     # 3. Order by the activity's started_at.
+
+#     # 4. Return all matching activities
