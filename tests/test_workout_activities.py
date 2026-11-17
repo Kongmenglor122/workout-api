@@ -1,8 +1,6 @@
 from app import models
 from datetime import datetime, timezone
 
-from datetime import datetime, timezone
-
 
 def test_create_workoutactivity(client):
     machine = {
