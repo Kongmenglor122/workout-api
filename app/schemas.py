@@ -52,3 +52,6 @@ class WorkoutActivityResponse(BaseModel):
     ended_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+class WorkoutActivityFinish(BaseModel):
+    ended_at: datetime
