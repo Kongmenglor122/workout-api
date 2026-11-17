@@ -5,6 +5,7 @@ __pycache__/
 
 # Local secrets
 .env
+.env.docker
 
 # macOS
 .DS_Store
