@@ -6,7 +6,7 @@ from sqlalchemy import select
 from fastapi import APIRouter, Depends, HTTPException
 
 router = APIRouter(
-    prefix="/workouts/{id}/activities",
+    prefix="/workouts/{workout_id}/activities",
     tags=["Workout Activities"],
 )
 
@@ -49,16 +49,34 @@ def create_workout_activity(workout_id: int, body: schemas.WorkoutActivityCreate
         detail=f"Please finish activity {active_activity.id} started_at: {active_activity.started_at} before starting another.",
     )
 
-@router.patch("/{activity_id}/finish", response_model=schemas.WorkoutActivityResponse)
-def finish_workout_activity(activity_id: int, ended_at_time: schemas.WorkoutActivityFinish, db: Session = Depends(get_db)):
+@router.patch(
+    "/{activity_id}/finish",
+    response_model=schemas.WorkoutActivityResponse,
+)
+def finish_workout_activity(
+    workout_id: int,
+    activity_id: int,
+    ended_at_time: schemas.WorkoutActivityFinish,
+    db: Session = Depends(get_db),
+):
+    workout = db.get(models.Workout, workout_id)
+
+    if workout is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Workout not found",
+        )
+
     activity_object = db.get(models.WorkoutActivity, activity_id)
 
-    if activity_object is None:
-        raise HTTPException(status_code=404, detail="ID doesn't exist.")
-    if activity_object.ended_at is not None:
-        raise HTTPException(status_code=409, detail="This workout activity has ended.")
-    if activity_object.started_at > ended_at_time.ended_at:
-        raise HTTPException(status_code=422, detail="End time must be greater than starting time.")
+    if (
+        activity_object is None
+        or activity_object.workout_id != workout_id
+    ):
+        raise HTTPException(
+            status_code=404,
+            detail="Activity not found in this workout",
+        )
 
     activity_object.ended_at = ended_at_time.ended_at
     db.commit()

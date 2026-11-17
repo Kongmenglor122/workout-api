@@ -30,7 +30,6 @@ def test_create_workoutactivity(client):
 
     activity_response = client.post(
         f"/workouts/{workout_id}/activities",
-        params={"workout_id": workout_id},
         json=workout_activity,
     )
 
