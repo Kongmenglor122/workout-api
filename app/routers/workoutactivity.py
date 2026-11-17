@@ -4,10 +4,13 @@ from app.database import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from fastapi import APIRouter, Depends, HTTPException
+from app.dependencies import get_current_user
 
+# workoutactivity.py
 router = APIRouter(
     prefix="/workouts/{workout_id}/activities",
     tags=["Workout Activities"],
+    dependencies=[Depends(get_current_user)],
 )
 
 @router.post("", status_code=201, response_model=schemas.WorkoutActivityResponse)
@@ -76,6 +79,11 @@ def finish_workout_activity(
         raise HTTPException(
             status_code=404,
             detail="Activity not found in this workout",
+        )
+    if (ended_at_time.ended_at <= activity_object.started_at):
+        raise HTTPException(
+            status_code=422,
+            detail="Cannot update finish time before starting time."
         )
 
     activity_object.ended_at = ended_at_time.ended_at
